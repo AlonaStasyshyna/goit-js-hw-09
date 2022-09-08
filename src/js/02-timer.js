@@ -14,7 +14,7 @@ const timerHours = document.querySelector('span[data-hours]');
 const timerMinutes = document.querySelector('span[data-minutes]');
 const timerSeconds = document.querySelector('span[data-seconds]');
 
-const SELECTEDDATE_KEY = 'selected-date';
+let selectedDate = 0;
 let timerStart = null;
 
 const options = {
@@ -23,11 +23,10 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    // console.log(selectedDates[0]);
-    if (new Date() >= selectedDates[0]) {
+    selectedDate = selectedDates[0];
+    if (new Date() >= selectedDate) {
       return window.alert('Please choose a date in the future');
     } else {
-      localStorage.setItem(SELECTEDDATE_KEY, selectedDates[0]);
       btnStart.disabled = false;
     }
   },
@@ -39,7 +38,6 @@ btnStart.addEventListener('click', onStartClick);
 
 function onStartClick() {
   timerStart = setInterval(() => {
-    const selectedDate = new Date(localStorage.getItem(SELECTEDDATE_KEY));
     const deltaTime = selectedDate - new Date();
     const { days, hours, minutes, seconds } = convertMs(deltaTime);
 
@@ -50,7 +48,7 @@ function onStartClick() {
 
     if (deltaTime < 1000) {
       clearInterval(timerStart);
-      localStorage.removeItem(SELECTEDDATE_KEY);
+      btnStart.disabled = true;
       return;
     }
   }, 1000);

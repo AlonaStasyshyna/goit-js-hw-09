@@ -4,24 +4,54 @@ const form = document.querySelector('.form');
 const delayValue = document.querySelector('input[name="delay"]');
 const stepValue = document.querySelector('input[name="step"]');
 const amountValue = document.querySelector('input[name="amount"]');
-// let position = 0;
-// let delay = delayValue.value;
 
-function createPromise(position, delay) {
-  const promise = new Promise((resolve, reject) => {
-    const timerForCreatePromise = setInterval(() => {
-      if (condition) {
-      }
+let position = 0;
+let delay = 0;
+let step = 0;
+let amount = 0;
 
-      const shouldResolve = Math.random() > 0.3;
-      if (shouldResolve) {
-        // Fulfill
-      } else {
-        // Reject
-      }
-    }, 1000);
-  });
+form.addEventListener('submit', e => {
+  e.preventDefault();
+
+  delay = Number(delayValue.value);
+  step = Number(stepValue.value);
+  amount = Number(amountValue.value);
+  startTimer();
+});
+
+function startTimer() {
+  if (position === amount) {
+    return;
+  }
+
+  const timerForCreatePromise = setTimeout(() => {
+    position += 1;
+    delay += step;
+    console.log(position);
+    console.log(delay);
+  }, delay);
 }
+
+// function createPromise(position, delay) {
+//   return new Promise((resolve, reject) => {
+//     const timerForCreatePromise = setTimeout(() => {
+//       if (condition) {
+//       }
+
+//       const shouldResolve = Math.random() > 0.3;
+//       if (shouldResolve) {
+//         // Fulfill
+//       } else {
+//         // Reject
+//       }
+//     }, 1000);
+//   });
+// }
+
+// form.addEventListener('submit', e => {
+//   e.preventDefault();
+//   startTimer();
+// }
 
 // form.addEventListener('submit', e => {
 //   e.preventDefault();

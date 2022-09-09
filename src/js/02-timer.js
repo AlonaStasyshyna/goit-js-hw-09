@@ -1,6 +1,6 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import Notiflix from 'notiflix';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const inputForDate = document.querySelector('#datetime-picker');
 const btnStart = document.querySelector('button[data-start]');
@@ -10,10 +10,6 @@ const timerBlock = document.querySelector('.timer');
 const timerFields = document.querySelectorAll('.field');
 const timerValues = document.querySelectorAll('.value');
 const timerLabels = document.querySelectorAll('.label');
-const timerDays = document.querySelector('span[data-days]');
-const timerHours = document.querySelector('span[data-hours]');
-const timerMinutes = document.querySelector('span[data-minutes]');
-const timerSeconds = document.querySelector('span[data-seconds]');
 
 let selectedDate = 0;
 let timerStart = null;
@@ -26,7 +22,7 @@ const options = {
   onClose(selectedDates) {
     selectedDate = selectedDates[0];
     if (new Date() >= selectedDate) {
-      return window.alert('Please choose a date in the future');
+      return Notify.failure('Please choose a date in the future');
     } else {
       btnStart.disabled = false;
     }
@@ -40,12 +36,12 @@ btnStart.addEventListener('click', onStartClick);
 function onStartClick() {
   timerStart = setInterval(() => {
     const deltaTime = selectedDate - new Date();
-    const { days, hours, minutes, seconds } = convertMs(deltaTime);
+    const deltaTimeObject = convertMs(deltaTime);
 
-    timerSeconds.textContent = `${seconds}`;
-    timerMinutes.textContent = `${minutes}`;
-    timerHours.textContent = `${hours}`;
-    timerDays.textContent = `${days}`;
+    for (const key in deltaTimeObject) {
+      document.querySelector(`span[data-${key}]`).textContent =
+        deltaTimeObject[`${key}`];
+    }
 
     if (deltaTime < 1000) {
       clearInterval(timerStart);
